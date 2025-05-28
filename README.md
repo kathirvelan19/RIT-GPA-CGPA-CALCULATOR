@@ -1,32 +1,91 @@
-🎓 RIT GPA and CGPA Calculator
-A sleek, responsive, and secure web-based tool for students of Rajalakshmi Institute of Technology (RIT) to calculate their GPA and CGPA with ease.
+🎓 RIT GPA & CGPA Calculator
+A responsive and user-friendly web application to calculate GPA and CGPA, exclusively for students of Rajalakshmi Institute of Technology (RIT), Chennai.
+
+
+
+📘 Overview
+This tool helps RIT students accurately calculate their Grade Point Average (GPA) and Cumulative GPA (CGPA) using Anna University’s grading scale. The application supports a dynamic input system, responsive design, and college email verification for authentication.
 
 🚀 Features
-✅ Secure Login using Register Number and Password
+📧 Email Verification: Accepts only RIT institutional email addresses (@ritchennai.edu.in).
 
-✅ User Info Form to capture Name, Department, and Year
+🧮 GPA Calculator:
 
-✅ GPA Calculator: Enter grades and credits for subjects to compute GPA
+Input number of subjects.
 
-✅ CGPA Calculator: Enter semester GPAs and corresponding credits to compute CGPA
+Enter subject name, grade, and credits.
 
-✅ Modern UI/UX with gradients, hover effects, and responsive layout
+GPA computed based on standard grade points (O = 10, A+ = 9, A = 8, etc.).
 
-✅ Fixed Width Design ensures consistent experience across devices
+📊 CGPA Calculator:
 
-✅ Dynamic Input Generation based on user entry
+Input GPAs for completed semesters.
 
-✅ Client-side Validation to reduce errors
-🛠️ Built With
-HTML5 & CSS3 – for layout and design
+CGPA is calculated as a weighted average.
 
-JavaScript (Vanilla) – for interactivity and logic
+💡 Live Validation: Helpful prompts for incorrect email or invalid inputs.
 
-Google Fonts – Sansation for a clean, academic font
+🎨 Modern UI: Clean and responsive design, works well on desktop and mobile (fixed layout for consistent experience).
 
-Responsive Design – Ensures consistent view on all screens
+🔒 Secure: Minimal front-end validation to ensure data integrity.
 
-🔐 Login Credentials
-Register Number: Must be a number between 2117210010001 and 2117240090099
+🏗️ Built With
+HTML5 + CSS3
 
-Password: rit@1432
+JavaScript (Vanilla)
+
+Google Fonts (Sansation)
+
+Responsive design with custom media queries
+
+📥 Getting Started
+1. Clone the Repository
+bash
+Copy
+Edit
+git clone https://github.com/your-username/rit-gpa-cgpa-calculator.git
+2. Navigate to the Project Directory
+bash
+Copy
+Edit
+cd rit-gpa-cgpa-calculator
+3. Open index.html in Your Browser
+Double-click the index.html file or open it via a local server like VS Code Live Server.
+
+📷 Screenshots
+Add screenshots here (GPA form, CGPA form, email verification)
+
+📧 Email Verification Policy
+Only emails ending with @ritchennai.edu.in are accepted.
+
+Ensures the tool is used exclusively by RIT students.
+
+📐 GPA Formula
+GPA
+=
+∑
+(
+Grade Point
+×
+Credit
+)
+∑
+Credits
+GPA= 
+∑Credits
+∑(Grade Point×Credit)
+​
+ 
+📐 CGPA Formula
+CGPA
+=
+∑
+(
+GPA of each semester
+)
+Number of semesters
+CGPA= 
+Number of semesters
+∑(GPA of each semester)
+​
+ 
