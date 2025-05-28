@@ -74,6 +74,7 @@
         height: 350px;
         object-fit: contain;
         padding: 10px 10px;
+        background: transparent;
       }
 
       .form {
@@ -405,6 +406,7 @@
   </head>
   <body>
     <div class="container-head">
+      <img src="rit-logo.jpg" id="imgbox" alt="ritlogo">
       <h1>RIT GPA AND CGPA CALCULATOR</h1>
       <p>
         Rajalakshmi Institute of Technology is an engineering college in
@@ -412,7 +414,7 @@
         RIT is approved by AICTE and affiliated with Anna University, Chennai
         and accredited with 'A++' Grade in NAAC.
       </p>
-      <img src="rit-logo-new.png" id="imgbox" alt="ritlogo">
+      
     </div>
 
     <!-- Email Validation Form -->
@@ -606,8 +608,7 @@
           const gpa = (totalGradePoints / totalCredits).toFixed(2);
           document.getElementById("result").innerHTML = `
             <strong>Your GPA: ${gpa}</strong><br>
-            Total Grade Points: ${totalGradePoints}<br>
-            Total Credits: ${totalCredits}
+            
           `;
         } else {
           document.getElementById("result").innerHTML = "Please fill in all fields correctly.";
@@ -665,8 +666,7 @@
           const cgpa = (totalGPA / semesterCount).toFixed(2);
           document.getElementById("cgpaResult").innerHTML = `
             <strong>Your CGPA: ${cgpa}</strong><br>
-            Based on ${semesterCount} semesters<br>
-            Average of all semester GPAs
+            
           `;
         } else {
           document.getElementById("cgpaResult").innerHTML = "Please fill in all GPA fields correctly (0-10).";
