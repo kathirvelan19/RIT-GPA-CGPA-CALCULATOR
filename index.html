@@ -722,7 +722,7 @@ p {
     <div id="gpaCalculator">
         <h2><i class="fas fa-graduation-cap"></i> GPA Calculator</h2>
         <p class="para1">
-            Enter your subjects, grades (O=10, A+=9, A=8, etc.), and credits (supports decimals like 1.5, 2.5).
+            Enter your subjects, grades (O=10, A+=9, A=8, etc.), and credits.
         </p>
         
         <div class="info-card">
@@ -734,6 +734,8 @@ p {
                 <span>B+ = 7</span>
                 <span>B = 6</span>
                 <span>C = 5</span>
+                <span>RA=0</span>
+                <span>SA=0</span>
                 <span>U = 0</span>
             </div>
         </div>
@@ -1144,7 +1146,7 @@ p {
             return;
         }
         
-        const gpa = (totalGradePoints / totalCredits).toFixed(2);
+        const gpa = (totalGradePoints / totalCredits).toFixed(3);
         
         // Update summary
         document.getElementById('totalGradePoints').textContent = totalGradePoints.toFixed(2);
@@ -1241,7 +1243,7 @@ p {
             return;
         }
         
-        const cgpa = (totalGradePoints / totalCredits).toFixed(2);
+        const cgpa = (totalGradePoints / totalCredits).toFixed(3);
         
         // Update summary
         document.getElementById('cgpaTotalGradePoints').textContent = totalGradePoints.toFixed(2);
