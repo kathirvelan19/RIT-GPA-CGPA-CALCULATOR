@@ -1,686 +1,1375 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RIT GPA And CGPA Calculator</title>
-    <link rel="icon" href="rit icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sansation:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: "Sansation", sans-serif;
-        background: #cac2ff;
-        background: linear-gradient(90deg, rgba(202, 194, 255, 1) 0%, rgba(96, 96, 235, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sansation:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    :root {
+    --primary-color: #3626e2;
+    --secondary-color: #00d4fe;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --warning-color: #ffc107;
+    --light-bg: rgba(255, 255, 255, 0.98);
+    --dark-text: #2c3e50;
+    --light-text: #ffffff;
+    --border-radius: 15px;
+    --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        background-size: 100% 100%;
-        background-attachment: fixed;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        padding-bottom: 50px;
-        position: relative;
-      }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-        pointer-events: none;
-        z-index: 1;
-      }
+body {
+    font-family: "Sansation", sans-serif;
+    background: linear-gradient(135deg, #cac2ff 0%, #6060eb 35%, #00d4ff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px 50px;
+    position: relative;
+    overflow-x: auto;
+}
 
-      body > * {
-        position: relative;
-        z-index: 2;
-      }
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+    z-index: 1;
+}
 
-      .container-head {
-        text-align: center;
-        margin-top: 40px;
-      }
+body > * {
+    position: relative;
+    z-index: 2;
+}
 
-      p {
-        padding:10px;
-        font-size: 18px;
-        color: #fff;
-        margin-bottom: 20px;
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-        line-height: 1.6;
-        font-weight: 400;
-      }
+.container-head {
+    text-align: center;
+    margin-bottom: 30px;
+    max-width: 800px;
+}
 
-      h1 {
-        font-size: 36px;
-        color: #fff;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-        font-weight: 700;
-        letter-spacing: 1px;
-        padding:5pxpx
-      }
+#imgbox {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
 
-      #imgbox {
-        padding:10px;
-        width: 550px;
-        height: 350px;
-        object-fit: contain;
-        margin:15px;
-        background: transparent;
-      }
+h1 {
+    font-size: clamp(24px, 4vw, 36px);
+    color: var(--light-text);
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
 
-      .form {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.1) inset;
-        border-radius: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 20px 20px;
+p {
+    font-size: 16px;
+    color: var(--light-text);
+    line-height: 1.6;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form {
+    background: var(--light-bg);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: var(--transition);
+}
+
+.form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.form label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form input {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 15px;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(54, 38, 226, 0.1);
+    background: white;
+}
+
+.form button {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(54, 38, 226, 0.3);
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid var(--error-color);
+}
+
+.success-message {
+    color: var(--success-color);
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid var(--success-color);
+}
+
+.calculator-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(54, 38, 226, 0.3);
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--success-color), #20c997);
+}
+
+#gpaCalculator,
+#cgpaCalculator {
+    background: var(--light-bg);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    display: none;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#gpaCalculator:hover,
+#cgpaCalculator:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+#gpaCalculator h2,
+#cgpaCalculator h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 24px;
+}
+
+.para1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.grade-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.grade-info span {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form-controls label {
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#subjectCount,
+#semesterCount {
+    width: 80px;
+    height: 45px;
+    text-align: center;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    background: white;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.generate-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(54, 38, 226, 0.3);
+}
+
+.input-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #fafbfc;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    transition: var(--transition);
+}
+
+.input-row:hover {
+    background: #f0f4f8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.input-row input,
+.input-row select {
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    transition: var(--transition);
+    outline: none;
+}
+
+.input-row input:focus,
+.input-row select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(54, 38, 226, 0.1);
+}
+
+.input-row input[type="number"] {
+    text-align: center;
+    font-weight: 600;
+}
+
+.semester-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    padding: 12px;
+    border: 2px solid #dee2e6;
+}
+
+.cgpa-input-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.cgpa-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #fafbfc;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    transition: var(--transition);
+}
+
+.cgpa-input-row:hover {
+    background: #f0f4f8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.calculation-summary {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin: 20px 0;
+    border: 2px solid var(--primary-color);
+}
+
+.calculation-summary h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    justify-content: center;
+}
+
+.summary-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calculate-btn {
+    background: linear-gradient(135deg, var(--success-color), #20c997);
+    color: white;
+    border: none;
+    padding: 18px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 25px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+#result,
+#cgpaResult {
+    margin-top: 25px;
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--primary-color);
+    text-align: center;
+    padding: 25px;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border-radius: var(--border-radius);
+    border: 3px solid var(--primary-color);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+#result:hover,
+#cgpaResult:hover {
+    transform: scale(1.02);
+}
+
+.help-section {
+    background: var(--light-bg);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--box-shadow);
+    margin-top: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.help-content h3 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.help-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.help-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.help-item p {
+    color: var(--dark-text);
+    font-size: 14px;
+    line-height: 1.5;
+    text-shadow: none;
+}
+
+/* Input validation styles */
+.input-error {
+    border-color: var(--error-color) !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+
+.input-success {
+    border-color: var(--success-color) !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+}
+
+/* Loading animation */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px 5px 30px;
+    }
+    
+    .form {
+        padding: 25px 20px;
+    }
+    
+    #gpaCalculator,
+    #cgpaCalculator {
+        padding: 25px 20px;
+    }
+    
+    .input-header,
+    .input-row {
+        grid-template-columns: 1fr;
         gap: 10px;
-        width: 340px;
-        display: flex;
+        text-align: center;
+    }
+    
+    .cgpa-input-header,
+    .cgpa-input-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .summary-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .help-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-controls {
         flex-direction: column;
-        transition: all 0.3s ease;
-      }
-
-      .form:hover {
-        transform: scale(1.02) translateY(-5px);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), 0 0 30px rgba(255, 255, 255, 0.15) inset;
-      }
-
-      .form input,
-      .form select {
-        background: #f5f7fa;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin-top: 5px;
-        padding: 15px;
-        font-size: 15px;
-        transition: 0.3s ease;
-      }
-
-      .form input:focus,
-      .form select:focus {
-        outline: none;
-        border-color: #3626e2;
-        box-shadow: 0 0 5px rgba(54, 38, 226, 0.3);
-        padding: 25px;
-      }
-
-      .form button {
-        margin-top: 25px;
-        background-color: #3626e2;
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        border: none;
-        padding: 12px;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-      }
-
-      .form button:hover {
-        background-color: #2418c0;
-      }
-
-      .error-message {
-        color: #dc3545;
-        font-size: 14px;
-        margin-top: 5px;
         text-align: center;
-      }
-
-      .success-message {
-        color: #28a745;
-        font-size: 14px;
-        margin-top: 5px;
-        text-align: center;
-      }
-
-      #gpaCalculator,
-      #cgpaCalculator {
-        background-color: rgba(255, 255, 255, 0.95);
-        padding: 30px;
-        display: none;
-        border-radius: 20px;
-        margin-top: 30px;
-        width: 650px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease;
-      }
-
-      #gpaCalculator:hover,
-      #cgpaCalculator:hover {
-        transform: scale(1.01);
-      }
-
-      #gpaCalculator h2,
-      #cgpaCalculator h2 {
-        margin-top: 0;
-        color: #3626e2;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .para1 {
-        color: #2a44d4;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .calculator-nav {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 20px;
-      }
-
-      .nav-btn {
-        background: linear-gradient(135deg, #3626e2, #00d4fe);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .nav-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(54, 38, 226, 0.3);
-      }
-
-      .nav-btn.active {
-        background: linear-gradient(135deg, #28a745, #20c997);
-      }
-
-      /* Horizontal layout styles */
-      .input-header {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 15px;
-        padding: 12px;
-        background: linear-gradient(135deg, #3626e2, #00d4fe);
-        border-radius: 10px;
-        font-weight: bold;
-        color: white;
-        text-align: center;
-      }
-
-      .input-row {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 12px;
-        padding: 15px;
-        background-color: #fafbfc;
-        border-radius: 10px;
-        border: 1px solid #e1e5e9;
-        transition: all 0.3s ease;
-      }
-
-      .input-row:hover {
-        background-color: #f0f4f8;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .input-row input,
-      .input-row select {
-        margin: 0;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 14px;
-        background: white;
-        transition: all 0.3s ease;
-      }
-
-      .input-row input:focus,
-      .input-row select:focus {
-        border-color: #3626e2;
-        box-shadow: 0 0 8px rgba(54, 38, 226, 0.3);
-        transform: scale(1.02);
-      }
-
-      .semester-label {
-        display: flex;
+    }
+    
+    .calculator-nav {
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        color: #3626e2;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border-radius: 8px;
-        padding: 10px;
-        border: 2px solid #dee2e6;
-      }
+    }
+    
+    .nav-btn {
+        width: 200px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    #imgbox {
+        width: 150px;
+        height: 90px;
+    }
+}
 
-      /* CGPA Calculator specific styles */
-      .cgpa-input-header {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 15px;
+@media (max-width: 480px) {
+    .form {
+        width: 95%;
+        padding: 20px 15px;
+    }
+    
+    #gpaCalculator,
+    #cgpaCalculator {
+        width: 95%;
+        padding: 20px 15px;
+    }
+    
+    .input-row,
+    .cgpa-input-row {
         padding: 12px;
-        background: linear-gradient(135deg, #3626e2, #00d4fe);
-        border-radius: 10px;
-        font-weight: bold;
-        color: white;
-        text-align: center;
-      }
+    }
+    
+    .grade-info {
+        gap: 8px;
+    }
+    
+    .grade-info span {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
 
-      .cgpa-input-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 12px;
-        padding: 15px;
-        background-color: #fafbfc;
-        border-radius: 10px;
-        border: 1px solid #e1e5e9;
-        transition: all 0.3s ease;
-      }
-
-      .cgpa-input-row:hover {
-        background-color: #f0f4f8;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Form controls styling */
-      .form-controls {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
-
-      .form-controls label {
-        font-weight: 600;
-        color: #3626e2;
-      }
-
-      #subjectCount,
-      #semesterCount {
-        width: 60px;
-        height: 40px;
-        text-align: center;
-        border: 2px solid #3626e2;
-        border-radius: 8px;
-        background: white;
-        font-weight: bold;
-        color: #3626e2;
-      }
-
-      .generate-btn {
-        background: linear-gradient(135deg, #3626e2, #00d4fe);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .generate-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(54, 38, 226, 0.3);
-      }
-
-      .calculate-btn {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 20px;
-        width: 100%;
-      }
-
-      .calculate-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
-      }
-
-      #result,
-      #cgpaResult {
-        margin-top: 20px;
-        font-weight: bold;
-        font-size: 20px;
-        color: #3626e2;
-        text-align: center;
-        padding: 15px;
-        background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-        border-radius: 10px;
-        border: 2px solid #3626e2;
-      }
-
-      /* Fixed layout for all devices - same appearance everywhere */
-      @media (max-width: 768px) {
-        body {
-          overflow-x: auto;
-          min-width: 700px;
-        }
-        
-        #gpaCalculator, #cgpaCalculator {
-          width: 650px;
-          min-width: 650px;
-        }
-        
-        .input-header,
-        .input-row {
-          grid-template-columns: 2fr 1fr 1fr;
-          gap: 15px;
-          min-width: 580px;
-        }
-
-        .cgpa-input-header,
-        .cgpa-input-row {
-          grid-template-columns: 1fr 1fr;
-          gap: 15px;
-          min-width: 580px;
-        }
-        
-        .form-controls {
-          flex-wrap: nowrap;
-        }
-      }
-    </style>
-  </head>
-  <body>
+</style>
+<body>
     <div class="container-head">
-      <img src="rit-logo-removebg-preview.png" id="imgbox" alt="ritlogo">
-      <h1>RIT GPA AND CGPA CALCULATOR</h1>
-      <p>
-        Rajalakshmi Institute of Technology is an engineering college in
-        Chennai, Tamil Nadu, India.<br />
-        RIT is approved by AICTE and affiliated with Anna University, Chennai
-        and accredited with 'A++' Grade in NAAC.
-      </p>
-      
+         <img src="rit-logo-removebg-preview.png" id="imgbox" alt="ritlogo">
+        <h1>RIT GPA AND CGPA CALCULATOR</h1>
+        <p>
+            Rajalakshmi Institute of Technology is an engineering college in
+            Chennai, Tamil Nadu, India.<br>
+            RIT is approved by AICTE and affiliated with Anna University, Chennai
+            and accredited with 'A++' Grade in NAAC.
+        </p>
     </div>
 
     <!-- Email Validation Form -->
     <form class="form" id="emailForm">
-      <label for="email">EMAIL ID</label>
-      <input type="email" id="email" placeholder="Enter our collage mail" required />
-      <div id="emailError" class="error-message" style="display: none;"></div>
-      <div id="emailSuccess" class="success-message" style="display: none;"></div>
-      <button type="submit">Verify Email</button>
+        <label for="email">EMAIL ID</label>
+        <input type="email" id="email" placeholder="Enter your college email" required>
+        <div id="emailError" class="error-message" style="display: none;"></div>
+        <div id="emailSuccess" class="success-message" style="display: none;"></div>
+        <button type="submit">
+            <i class="fas fa-envelope-check"></i>
+            Verify Email
+        </button>
     </form>
 
     <!-- Calculator Navigation -->
     <div id="calculatorNav" style="display: none;">
-      <div class="calculator-nav">
-        <button type="button" id="showGPA" class="nav-btn active">GPA Calculator</button>
-        <button type="button" id="showCGPA" class="nav-btn">CGPA Calculator</button>
-      </div>
+        <div class="calculator-nav">
+            <button type="button" id="showGPA" class="nav-btn active">
+                <i class="fas fa-calculator"></i>
+                GPA Calculator
+            </button>
+            <button type="button" id="showCGPA" class="nav-btn">
+                <i class="fas fa-chart-line"></i>
+                CGPA Calculator
+            </button>
+        </div>
     </div>
 
     <!-- GPA Calculator -->
     <div id="gpaCalculator">
-      <h2>GPA Calculator</h2>
-      <p class="para1">
-        Enter your subjects, grades (O=10, A+=9, A=8, etc.), and credits.
-      </p>
-      <form id="calcForm">
-        <div class="form-controls">
-          <label for="subjectCount">Number of Subjects:</label>
-          <input
-            type="number"
-            id="subjectCount"
-            min="1"
-            max="10"
-            value="5"
-            required
-          />
-          <button type="button" id="generateSubjects" class="generate-btn">
-            Generate Subject Inputs
-          </button>
+        <h2><i class="fas fa-graduation-cap"></i> GPA Calculator</h2>
+        <p class="para1">
+            Enter your subjects, grades (O=10, A+=9, A=8, etc.), and credits (supports decimals like 1.5, 2.5).
+        </p>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> Grade Point System</h4>
+            <div class="grade-info">
+                <span>O = 10</span>
+                <span>A+ = 9</span>
+                <span>A = 8</span>
+                <span>B+ = 7</span>
+                <span>B = 6</span>
+                <span>C = 5</span>
+                <span>U = 0</span>
+            </div>
         </div>
-        <div id="subjectsInputs"></div>
-        <button type="submit" class="calculate-btn">Calculate GPA</button>
-      </form>
-      <div id="result"></div>
+
+        <form id="calcForm">
+            <div class="form-controls">
+                <label for="subjectCount">
+                    <i class="fas fa-hashtag"></i>
+                    Number of Subjects:
+                </label>
+                <input type="number" id="subjectCount" min="1" max="12" value="5" required>
+                <button type="button" id="generateSubjects" class="generate-btn">
+                    <i class="fas fa-plus"></i>
+                    Generate Subject Inputs
+                </button>
+            </div>
+            
+            <div id="subjectsInputs"></div>
+            
+            <div class="calculation-summary" id="calculationSummary" style="display: none;">
+                <h4><i class="fas fa-calculator"></i> Calculation Summary</h4>
+                <div class="summary-content">
+                    <div class="summary-item">
+                        <span>Total Grade Points:</span>
+                        <span id="totalGradePoints">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Credits:</span>
+                        <span id="totalCredits">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="calculate-btn">
+                <i class="fas fa-calculator"></i>
+                Calculate GPA
+            </button>
+        </form>
+        <div id="result"></div>
     </div>
 
     <!-- CGPA Calculator -->
     <div id="cgpaCalculator">
-      <h2>CGPA Calculator</h2>
-      <p class="para1">
-        Enter your previous semester GPAs. CGPA will be calculated as the average of all semester GPAs.
-      </p>
-      <form id="cgpaForm">
-        <div class="form-controls">
-          <label for="semesterCount">Number of Semesters:</label>
-          <input
-            type="number"
-            id="semesterCount"
-            min="1"
-            max="12"
-            value="4"
-            required
-          />
-          <button type="button" id="generateSemesters" class="generate-btn">
-            Generate Semester Inputs
-          </button>
+        <h2><i class="fas fa-chart-bar"></i> CGPA Calculator</h2>
+        <p class="para1">
+            Enter your semester-wise GPA and credits to calculate overall CGPA (supports decimal credits).
+        </p>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-lightbulb"></i> How to Use</h4>
+            <p>Enter the GPA and total credits for each semester. Credits can be decimal values (e.g., 18.5, 20.5).</p>
         </div>
-        <div id="semesterInputs"></div>
-        <button type="submit" class="calculate-btn">Calculate CGPA</button>
-      </form>
-      <div id="cgpaResult"></div>
+
+        <form id="cgpaForm">
+            <div class="form-controls">
+                <label for="semesterCount">
+                    <i class="fas fa-calendar-alt"></i>
+                    Number of Semesters:
+                </label>
+                <input type="number" id="semesterCount" min="1" max="10" value="4" required>
+                <button type="button" id="generateSemesters" class="generate-btn">
+                    <i class="fas fa-plus"></i>
+                    Generate Semester Inputs
+                </button>
+            </div>
+            
+            <div id="semesterInputs"></div>
+            
+            <div class="calculation-summary" id="cgpaCalculationSummary" style="display: none;">
+                <h4><i class="fas fa-calculator"></i> Calculation Summary</h4>
+                <div class="summary-content">
+                    <div class="summary-item">
+                        <span>Total Grade Points:</span>
+                        <span id="cgpaTotalGradePoints">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Credits:</span>
+                        <span id="cgpaTotalCredits">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="calculate-btn">
+                <i class="fas fa-chart-line"></i>
+                Calculate CGPA
+            </button>
+        </form>
+        <div id="cgpaResult"></div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="help-section" id="helpSection" style="display: none;">
+        <div class="help-content">
+            <h3><i class="fas fa-question-circle"></i> Need Help?</h3>
+            <div class="help-grid">
+                <div class="help-item">
+                    <h4>Decimal Credits</h4>
+                    <p>You can enter credits as decimal values (e.g., 1.5, 2.5, 3.5) for laboratory courses or special subjects.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Grade Points</h4>
+                    <p>Select the appropriate grade from the dropdown. The system automatically converts grades to points.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Calculation</h4>
+                    <p>GPA = (Sum of Grade Points × Credits) / Total Credits</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-      // Elements
-      const emailForm = document.getElementById("emailForm");
-      const calculatorNav = document.getElementById("calculatorNav");
-      const gpaCalculator = document.getElementById("gpaCalculator");
-      const cgpaCalculator = document.getElementById("cgpaCalculator");
-      const showGPABtn = document.getElementById("showGPA");
-      const showCGPABtn = document.getElementById("showCGPA");
+        class GPACGPACalculator {
+    constructor() {
+        this.emailForm = document.getElementById('emailForm');
+        this.calculatorNav = document.getElementById('calculatorNav');
+        this.gpaCalculator = document.getElementById('gpaCalculator');
+        this.cgpaCalculator = document.getElementById('cgpaCalculator');
+        this.helpSection = document.getElementById('helpSection');
+        
+        this.init();
+    }
 
-      // Email validation logic
-      emailForm.addEventListener("submit", function (e) {
+    init() {
+        this.setupEventListeners();
+        this.generateSubjectInputs();
+        this.generateSemesterInputs();
+    }
+
+    setupEventListeners() {
+        // Email form validation
+        this.emailForm.addEventListener('submit', (e) => this.handleEmailSubmit(e));
+        
+        // Navigation buttons
+        document.getElementById('showGPA').addEventListener('click', () => this.showCalculator('gpa'));
+        document.getElementById('showCGPA').addEventListener('click', () => this.showCalculator('cgpa'));
+        
+        // Generate inputs
+        document.getElementById('generateSubjects').addEventListener('click', () => this.generateSubjectInputs());
+        document.getElementById('generateSemesters').addEventListener('click', () => this.generateSemesterInputs());
+        
+        // Form submissions
+        document.getElementById('calcForm').addEventListener('submit', (e) => this.calculateGPA(e));
+        document.getElementById('cgpaForm').addEventListener('submit', (e) => this.calculateCGPA(e));
+        
+        // Real-time validation
+        document.getElementById('subjectCount').addEventListener('input', () => this.validateSubjectCount());
+        document.getElementById('semesterCount').addEventListener('input', () => this.validateSemesterCount());
+    }
+
+    handleEmailSubmit(e) {
         e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const errorDiv = document.getElementById('emailError');
+        const successDiv = document.getElementById('emailSuccess');
         
-        const email = document.getElementById("email").value.trim();
-        const emailError = document.getElementById("emailError");
-        const emailSuccess = document.getElementById("emailSuccess");
+        // Clear previous messages
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
         
-        // Reset messages
-        emailError.style.display = "none";
-        emailSuccess.style.display = "none";
-        
-        // Validate email domain
-        if (!email.endsWith("ritchennai.edu.in")) {
-          emailError.textContent = "Please use your RIT email address";
-          emailError.style.display = "block";
-          return;
+        if (!this.validateEmail(email)) {
+            this.showMessage(errorDiv, 'Please enter a valid college email address ending with .edu or your college domain.');
+            return;
         }
         
-        // Email is valid
-        emailSuccess.textContent = "Email verified successfully!";
-        emailSuccess.style.display = "block";
+        // Simulate email validation (in real app, this would be server-side)
+        if (this.isValidCollegeEmail(email)) {
+            this.showMessage(successDiv, 'Email verified successfully! Welcome to RIT GPA Calculator.');
+            
+            // Show calculators after successful email verification
+            setTimeout(() => {
+                this.emailForm.style.display = 'none';
+                this.calculatorNav.style.display = 'block';
+                this.gpaCalculator.style.display = 'block';
+                this.helpSection.style.display = 'block';
+            }, 1000);
+        } else {
+            this.showMessage(errorDiv, 'Please use your official college email address.');
+        }
+    }
+
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    isValidCollegeEmail(email) {
+        // Accept various college email patterns
+        const validDomains = ['edu', 'ac.in', 'edu.in', 'rit.edu', 'ritchennai.edu.in'];
+        const domain = email.toLowerCase().split('@')[1];
         
-        // Hide email form and show calculators
-        setTimeout(() => {
-          emailForm.style.display = "none";
-          calculatorNav.style.display = "block";
-          gpaCalculator.style.display = "block";
-        }, 1000);
-      });
+        return validDomains.some(validDomain => 
+            domain === validDomain || domain.endsWith('.' + validDomain)
+        );
+    }
 
-      // Navigation between calculators
-      showGPABtn.addEventListener("click", function() {
-        showGPABtn.classList.add("active");
-        showCGPABtn.classList.remove("active");
-        gpaCalculator.style.display = "block";
-        cgpaCalculator.style.display = "none";
-      });
+    showMessage(element, message) {
+        element.textContent = message;
+        element.style.display = 'block';
+    }
 
-      showCGPABtn.addEventListener("click", function() {
-        showCGPABtn.classList.add("active");
-        showGPABtn.classList.remove("active");
-        cgpaCalculator.style.display = "block";
-        gpaCalculator.style.display = "none";
-      });
+    showCalculator(type) {
+        const gpaBtn = document.getElementById('showGPA');
+        const cgpaBtn = document.getElementById('showCGPA');
+        
+        if (type === 'gpa') {
+            this.gpaCalculator.style.display = 'block';
+            this.cgpaCalculator.style.display = 'none';
+            gpaBtn.classList.add('active');
+            cgpaBtn.classList.remove('active');
+        } else {
+            this.gpaCalculator.style.display = 'none';
+            this.cgpaCalculator.style.display = 'block';
+            gpaBtn.classList.remove('active');
+            cgpaBtn.classList.add('active');
+        }
+    }
 
-      // GPA Calculator Logic
-      const generateSubjectsBtn = document.getElementById("generateSubjects");
-      const subjectsInputsDiv = document.getElementById("subjectsInputs");
-      const calcForm = document.getElementById("calcForm");
+    validateSubjectCount() {
+        const count = parseInt(document.getElementById('subjectCount').value);
+        const input = document.getElementById('subjectCount');
+        
+        if (count < 1 || count > 12) {
+            input.classList.add('input-error');
+            input.classList.remove('input-success');
+        } else {
+            input.classList.remove('input-error');
+            input.classList.add('input-success');
+        }
+    }
 
-      generateSubjectsBtn.addEventListener("click", function () {
-        const count = parseInt(document.getElementById("subjectCount").value);
-        subjectsInputsDiv.innerHTML = "";
+    validateSemesterCount() {
+        const count = parseInt(document.getElementById('semesterCount').value);
+        const input = document.getElementById('semesterCount');
+        
+        if (count < 1 || count > 10) {
+            input.classList.add('input-error');
+            input.classList.remove('input-success');
+        } else {
+            input.classList.remove('input-error');
+            input.classList.add('input-success');
+        }
+    }
 
-        // Create header
-        const header = document.createElement("div");
-        header.className = "input-header";
+    generateSubjectInputs() {
+        const count = parseInt(document.getElementById('subjectCount').value);
+        const container = document.getElementById('subjectsInputs');
+        
+        if (count < 1 || count > 12) {
+            alert('Please enter a valid number of subjects (1-12)');
+            return;
+        }
+        
+        container.innerHTML = '';
+        
+        // Add header
+        const header = document.createElement('div');
+        header.className = 'input-header';
         header.innerHTML = `
-          <div>Subject Name</div>
-          <div>Grade</div>
-          <div>Credits</div>
+            <div>Subject Name</div>
+            <div>Grade</div>
+            <div>Credits</div>
         `;
-        subjectsInputsDiv.appendChild(header);
-
-        // Create input rows
+        container.appendChild(header);
+        
+        // Add input rows
         for (let i = 1; i <= count; i++) {
-          const row = document.createElement("div");
-          row.className = "input-row";
-          row.innerHTML = `
-            <input type="text" placeholder="Subject ${i}" required />
-            <select required>
-              <option value="">Select Grade</option>
-              <option value="10">O (10)</option>
-              <option value="9">A+ (9)</option>
-              <option value="8">A (8)</option>
-              <option value="7">B+ (7)</option>
-              <option value="6">B (6)</option>
-              <option value="5">C (5)</option>
-              <option value="0">U (0)</option>
-              <option value="0">RA(0)</option>
-              <option value="0">SA(0)</option>
-
-            </select>
-            <input type="number" step="0.01" min="0" max="4" placeholder="Credits" required />
-          `;
-          subjectsInputsDiv.appendChild(row);
+            const row = document.createElement('div');
+            row.className = 'input-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Subject ${i} name" required>
+                <select required>
+                    <option value="">Select Grade</option>
+                    <option value="10">O (10)</option>
+                    <option value="9">A+ (9)</option>
+                    <option value="8">A (8)</option>
+                    <option value="7">B+ (7)</option>
+                    <option value="6">B (6)</option>
+                    <option value="5">C (5)</option>
+                    <option value="0">U (0)</option>
+                </select>
+                <input type="number" placeholder="Credits" min="0.5" max="10" step="0.5" required>
+            `;
+            container.appendChild(row);
+            
+            // Add real-time validation for credits
+            const creditInput = row.querySelector('input[type="number"]');
+            creditInput.addEventListener('input', (e) => this.validateCreditInput(e.target));
         }
-      });
+    }
 
-      calcForm.addEventListener("submit", function (e) {
+    generateSemesterInputs() {
+        const count = parseInt(document.getElementById('semesterCount').value);
+        const container = document.getElementById('semesterInputs');
+        
+        if (count < 1 || count > 10) {
+            alert('Please enter a valid number of semesters (1-10)');
+            return;
+        }
+        
+        container.innerHTML = '';
+        
+        // Add header
+        const header = document.createElement('div');
+        header.className = 'cgpa-input-header';
+        header.innerHTML = `
+            <div>Semester GPA</div>
+            <div>Total Credits</div>
+        `;
+        container.appendChild(header);
+        
+        // Add input rows
+        for (let i = 1; i <= count; i++) {
+            const row = document.createElement('div');
+            row.className = 'cgpa-input-row';
+            row.innerHTML = `
+                <input type="number" placeholder="Semester ${i} GPA" min="0" max="10" step="0.01" required>
+                <input type="number" placeholder="Total Credits" min="0.5" max="30" step="0.5" required>
+            `;
+            container.appendChild(row);
+            
+            // Add real-time validation
+            const inputs = row.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.type === 'number') {
+                        this.validateCreditInput(e.target);
+                    }
+                });
+            });
+        }
+    }
+
+    validateCreditInput(input) {
+        const value = parseFloat(input.value);
+        const min = parseFloat(input.min);
+        const max = parseFloat(input.max);
+        
+        if (isNaN(value) || value < min || value > max) {
+            input.classList.add('input-error');
+            input.classList.remove('input-success');
+        } else {
+            input.classList.remove('input-error');
+            input.classList.add('input-success');
+        }
+    }
+
+    calculateGPA(e) {
         e.preventDefault();
-
-        const rows = subjectsInputsDiv.querySelectorAll(".input-row");
+        
+        const container = document.getElementById('subjectsInputs');
+        const rows = container.querySelectorAll('.input-row');
+        const resultDiv = document.getElementById('result');
+        const summaryDiv = document.getElementById('calculationSummary');
+        
+        if (rows.length === 0) {
+            alert('Please generate subject inputs first.');
+            return;
+        }
+        
         let totalGradePoints = 0;
         let totalCredits = 0;
-
-        rows.forEach((row) => {
-          const grade = parseFloat(row.children[1].value);
-          const credits = parseFloat(row.children[2].value);
-
-          if (!isNaN(grade) && !isNaN(credits)) {
-            totalGradePoints += grade * credits;
+        let validInputs = true;
+        let subjectDetails = [];
+        
+        rows.forEach((row, index) => {
+            const inputs = row.querySelectorAll('input, select');
+            const subjectName = inputs[0].value.trim();
+            const grade = parseFloat(inputs[1].value);
+            const credits = parseFloat(inputs[2].value);
+            
+            if (!subjectName || isNaN(grade) || isNaN(credits) || credits <= 0) {
+                validInputs = false;
+                inputs.forEach(input => input.classList.add('input-error'));
+                return;
+            }
+            
+            if (credits < 0.5 || credits > 10) {
+                validInputs = false;
+                inputs[2].classList.add('input-error');
+                alert(`Credits for subject ${index + 1} must be between 0.5 and 10.`);
+                return;
+            }
+            
+            const gradePoints = grade * credits;
+            totalGradePoints += gradePoints;
             totalCredits += credits;
-          }
-        });
-
-        if (totalCredits > 0) {
-          const gpa = (totalGradePoints / totalCredits).toFixed(2);
-          document.getElementById("result").innerHTML = `
-            <strong>Your GPA: ${gpa}</strong><br>
             
-          `;
-        } else {
-          document.getElementById("result").innerHTML = "Please fill in all fields correctly.";
+            subjectDetails.push({
+                name: subjectName,
+                grade: grade,
+                credits: credits,
+                gradePoints: gradePoints
+            });
+            
+            // Mark inputs as valid
+            inputs.forEach(input => {
+                input.classList.remove('input-error');
+                input.classList.add('input-success');
+            });
+        });
+        
+        if (!validInputs || totalCredits === 0) {
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please fill all fields correctly with valid credit values.';
+            resultDiv.style.background = 'rgba(220, 53, 69, 0.1)';
+            resultDiv.style.borderColor = '#dc3545';
+            resultDiv.style.color = '#dc3545';
+            return;
         }
-      });
-
-      // CGPA Calculator Logic (Modified for averaging)
-      const generateSemestersBtn = document.getElementById("generateSemesters");
-      const semesterInputsDiv = document.getElementById("semesterInputs");
-      const cgpaForm = document.getElementById("cgpaForm");
-
-      generateSemestersBtn.addEventListener("click", function () {
-        const count = parseInt(document.getElementById("semesterCount").value);
-        semesterInputsDiv.innerHTML = "";
-
-        // Create header
-        const header = document.createElement("div");
-        header.className = "cgpa-input-header";
-        header.innerHTML = `
-          <div>Semester</div>
-          <div>GPA</div>
+        
+        const gpa = (totalGradePoints / totalCredits).toFixed(2);
+        
+        // Update summary
+        document.getElementById('totalGradePoints').textContent = totalGradePoints.toFixed(2);
+        document.getElementById('totalCredits').textContent = totalCredits.toFixed(1);
+        summaryDiv.style.display = 'block';
+        
+        // Display result with grade classification
+        const gradeClass = this.getGradeClassification(parseFloat(gpa));
+        resultDiv.innerHTML = `
+            <i class="fas fa-trophy"></i>
+            <div style="margin-top: 10px;">
+                <strong>Your GPA: ${gpa}</strong>
+                <div style="font-size: 16px; margin-top: 8px; color: #666;">
+                    Classification: ${gradeClass}
+                </div>
+            </div>
         `;
-        semesterInputsDiv.appendChild(header);
-
-        // Create input rows
-        for (let i = 1; i <= count; i++) {
-          const row = document.createElement("div");
-          row.className = "cgpa-input-row";
-          row.innerHTML = `
-            <div class="semester-label">Semester ${i}</div>
-            <input type="number" step="0.01" min="0" max="10" placeholder="Enter GPA" required />
-          `;
-          semesterInputsDiv.appendChild(row);
-        }
-      });
-
-      cgpaForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const rows = semesterInputsDiv.querySelectorAll(".cgpa-input-row");
-        let totalGPA = 0;
-        let semesterCount = 0;
-
-        rows.forEach((row) => {
-          const gpaInput = row.querySelector('input[type="number"]');
-          const gpa = parseFloat(gpaInput.value);
-
-          if (!isNaN(gpa) && gpa >= 0 && gpa <= 10) {
-            totalGPA += gpa;
-            semesterCount++;
-          }
-        });
-
-        if (semesterCount > 0) {
-          const cgpa = (totalGPA / semesterCount).toFixed(2);
-          document.getElementById("cgpaResult").innerHTML = `
-            <strong>Your CGPA: ${cgpa}</strong><br>
-            
-          `;
+        
+        // Style based on performance
+        if (parseFloat(gpa) >= 8.5) {
+            resultDiv.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+            resultDiv.style.borderColor = '#28a745';
+            resultDiv.style.color = '#155724';
+        } else if (parseFloat(gpa) >= 6.5) {
+            resultDiv.style.background = 'linear-gradient(135deg, #fff3cd, #ffeaa7)';
+            resultDiv.style.borderColor = '#ffc107';
+            resultDiv.style.color = '#856404';
         } else {
-          document.getElementById("cgpaResult").innerHTML = "Please fill in all GPA fields correctly (0-10).";
+            resultDiv.style.background = 'linear-gradient(135deg, #f8d7da, #f5c6cb)';
+            resultDiv.style.borderColor = '#dc3545';
+            resultDiv.style.color = '#721c24';
         }
-      });
+    }
 
-      // Generate initial inputs
-      document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("generateSubjects").click();
-        document.getElementById("generateSemesters").click();
-      });
+    calculateCGPA(e) {
+        e.preventDefault();
+        
+        const container = document.getElementById('semesterInputs');
+        const rows = container.querySelectorAll('.cgpa-input-row');
+        const resultDiv = document.getElementById('cgpaResult');
+        const summaryDiv = document.getElementById('cgpaCalculationSummary');
+        
+        if (rows.length === 0) {
+            alert('Please generate semester inputs first.');
+            return;
+        }
+        
+        let totalGradePoints = 0;
+        let totalCredits = 0;
+        let validInputs = true;
+        let semesterDetails = [];
+        
+        rows.forEach((row, index) => {
+            const inputs = row.querySelectorAll('input');
+            const gpa = parseFloat(inputs[0].value);
+            const credits = parseFloat(inputs[1].value);
+            
+            if (isNaN(gpa) || isNaN(credits) || gpa < 0 || gpa > 10 || credits <= 0) {
+                validInputs = false;
+                inputs.forEach(input => input.classList.add('input-error'));
+                return;
+            }
+            
+            if (credits < 0.5 || credits > 30) {
+                validInputs = false;
+                inputs[1].classList.add('input-error');
+                alert(`Credits for semester ${index + 1} must be between 0.5 and 30.`);
+                return;
+            }
+            
+            const gradePoints = gpa * credits;
+            totalGradePoints += gradePoints;
+            totalCredits += credits;
+            
+            semesterDetails.push({
+                semester: index + 1,
+                gpa: gpa,
+                credits: credits,
+                gradePoints: gradePoints
+            });
+            
+            // Mark inputs as valid
+            inputs.forEach(input => {
+                input.classList.remove('input-error');
+                input.classList.add('input-success');
+            });
+        });
+        
+        if (!validInputs || totalCredits === 0) {
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please fill all fields correctly with valid values.';
+            resultDiv.style.background = 'rgba(220, 53, 69, 0.1)';
+            resultDiv.style.borderColor = '#dc3545';
+            resultDiv.style.color = '#dc3545';
+            return;
+        }
+        
+        const cgpa = (totalGradePoints / totalCredits).toFixed(2);
+        
+        // Update summary
+        document.getElementById('cgpaTotalGradePoints').textContent = totalGradePoints.toFixed(2);
+        document.getElementById('cgpaTotalCredits').textContent = totalCredits.toFixed(1);
+        summaryDiv.style.display = 'block';
+        
+        // Display result with grade classification
+        const gradeClass = this.getGradeClassification(parseFloat(cgpa));
+        resultDiv.innerHTML = `
+            <i class="fas fa-chart-line"></i>
+            <div style="margin-top: 10px;">
+                <strong>Your CGPA: ${cgpa}</strong>
+                <div style="font-size: 16px; margin-top: 8px; color: #666;">
+                    Classification: ${gradeClass}
+                </div>
+            </div>
+        `;
+        
+        // Style based on performance
+        if (parseFloat(cgpa) >= 8.5) {
+            resultDiv.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+            resultDiv.style.borderColor = '#28a745';
+            resultDiv.style.color = '#155724';
+        } else if (parseFloat(cgpa) >= 6.5) {
+            resultDiv.style.background = 'linear-gradient(135deg, #fff3cd, #ffeaa7)';
+            resultDiv.style.borderColor = '#ffc107';
+            resultDiv.style.color = '#856404';
+        } else {
+            resultDiv.style.background = 'linear-gradient(135deg, #f8d7da, #f5c6cb)';
+            resultDiv.style.borderColor = '#dc3545';
+            resultDiv.style.color = '#721c24';
+        }
+    }
+
+    getGradeClassification(score) {
+        if (score >= 9.5) return 'Outstanding (O)';
+        if (score >= 8.5) return 'Excellent (A+)';
+        if (score >= 7.5) return 'Very Good (A)';
+        if (score >= 6.5) return 'Good (B+)';
+        if (score >= 5.5) return 'Average (B)';
+        if (score >= 5.0) return 'Satisfactory (C)';
+        return 'Needs Improvement';
+    }
+}
+
+// Initialize the calculator when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new GPACGPACalculator();
+});
+
+// Add some utility functions for enhanced user experience
+function validateNumericInput(input, min = 0, max = 10) {
+    const value = parseFloat(input.value);
+    if (isNaN(value) || value < min || value > max) {
+        input.classList.add('input-error');
+        return false;
+    }
+    input.classList.remove('input-error');
+    input.classList.add('input-success');
+    return true;
+}
+
+// Add keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Ctrl + G for GPA Calculator
+    if (e.ctrlKey && e.key === 'g') {
+        e.preventDefault();
+        document.getElementById('showGPA')?.click();
+    }
+    
+    // Ctrl + C for CGPA Calculator
+    if (e.ctrlKey && e.key === 'c') {
+        e.preventDefault();
+        document.getElementById('showCGPA')?.click();
+    }
+    
+    // Enter to calculate when in form
+    if (e.key === 'Enter' && e.target.closest('#calcForm, #cgpaForm')) {
+        e.preventDefault();
+        const form = e.target.closest('form');
+        if (form) {
+            form.querySelector('.calculate-btn')?.click();
+        }
+    }
+});
+
+// Add print functionality
+function printResults() {
+    const gpaResult = document.getElementById('result');
+    const cgpaResult = document.getElementById('cgpaResult');
+    
+    if (gpaResult.innerHTML || cgpaResult.innerHTML) {
+        window.print();
+    } else {
+        alert('Please calculate GPA or CGPA first before printing.');
+    }
+}
+
+// Add export functionality
+function exportResults() {
+    const gpaResult = document.getElementById('result');
+    const cgpaResult = document.getElementById('cgpaResult');
+    
+    let exportData = 'RIT GPA/CGPA Calculator Results\n';
+    exportData += '=====================================\n';
+    exportData += `Date: ${new Date().toLocaleDateString()}\n\n`;
+    
+    if (gpaResult.innerHTML) {
+        exportData += `GPA Result: ${gpaResult.textContent}\n`;
+    }
+    
+    if (cgpaResult.innerHTML) {
+        exportData += `CGPA Result: ${cgpaResult.textContent}\n`;
+    }
+    
+    if (gpaResult.innerHTML || cgpaResult.innerHTML) {
+        const blob = new Blob([exportData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rit_gpa_cgpa_results.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    } else {
+        alert('Please calculate GPA or CGPA first before exporting.');
+    }
+}
+
     </script>
-  </body>
+</body>
 </html>
