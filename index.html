@@ -1113,7 +1113,7 @@ p {
                 return;
             }
             
-            if (credits < 0.5 || credits > 10) {
+            if (credits < 0 || credits > 10) {
                 validInputs = false;
                 inputs[2].classList.add('input-error');
                 alert(`Credits for subject ${index + 1} must be between 0.5 and 10.`);
