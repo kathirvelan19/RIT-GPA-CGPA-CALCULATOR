@@ -884,7 +884,7 @@ function calculateGPA() {
     
     // Update summary
     document.getElementById('totalCredits').textContent = totalCredits;
-    document.getElementById('totalPoints').textContent = totalPoints.toFixed(2);
+    document.getElementById('totalPoints').textContent = totalPoints.toFixed(3);
     
     // Display result
     const resultDiv = document.getElementById('result');
@@ -989,7 +989,7 @@ function calculateCGPA() {
     
     // Update summary
     document.getElementById('totalSemesters').textContent = validInputs;
-    document.getElementById('sumGPAs').textContent = totalGPA.toFixed(2);
+    document.getElementById('sumGPAs').textContent = totalGPA.toFixed(3);
     
     // Display result
     const resultDiv = document.getElementById('cgpaResult');
