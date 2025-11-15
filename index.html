@@ -817,7 +817,7 @@ function generateGPAInputs() {
     const count = parseInt(document.getElementById('subjectCount').value);
     const container = document.getElementById('gpaInputs');
     
-    if (count < 1 || count > 10) {
+    if (count < 1 || count > 64) {
         showError('Please enter a valid number of subjects (1-10)');
         return;
     }
@@ -840,7 +840,7 @@ function generateGPAInputs() {
         row.className = 'input-row';
         row.innerHTML = `
             <input type="text" placeholder="Subject ${i}" id="subject${i}">
-            <input type="number" min="1" max="10" placeholder="4" id="credits${i}">
+            <input type="number" min="1" max="64" placeholder="4" id="credits${i}">
             <select id="grade${i}">
                 <option value="">Select Grade</option>
                 <option value="0">0 (10)</option>
@@ -1107,4 +1107,5 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
